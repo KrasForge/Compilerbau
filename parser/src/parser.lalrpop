@@ -54,4 +54,262 @@ pub Program: ast::Program = {
     Item* => ast::Program { items: <> }
 };
 
-Item: ast::Item = {};
+Item: ast::Item = {
+    <DeclAssignment> ";" => ast::Item::GlobalVar(<>),
+    FunctionDefinition => ast::Item::Func(<>),
+};
+
+// ---------------------------------------------------------------------------
+// functions
+// ---------------------------------------------------------------------------
+
+FunctionDefinition: ast::FuncDef = {
+    <return_type:Type> <ident:Ident> "(" <params:ParameterList?> ")"
+        "{" <statements:Statement*> "}" => ast::FuncDef {
+        return_type,
+        ident,
+        params: params.unwrap_or_default(),
+        statements,
+    },
+};
+
+ParameterList: Vec<ast::FuncParam> = {
+    <first:Parameter> <rest:("," <Parameter>)*> => {
+        let mut params = vec![first];
+        params.extend(rest);
+        params
+    },
+};
+
+Parameter: ast::FuncParam = {
+    <data_type:Type> <ident:Ident> => ast::FuncParam { data_type, ident },
+};
+
+FunctionCall: ast::FuncCall = {
+    <ident:Ident> "(" <args:Arguments> ")" => ast::FuncCall {
+        res_ident: ast::ResIdent::new(ident),
+        args,
+    },
+};
+
+// A possibly empty, comma separated list of assignments without trailing comma.
+Arguments: Vec<ast::Expr> = {
+    => Vec::new(),
+    <first:Assignment> <rest:("," <Assignment>)*> => {
+        let mut args = vec![first];
+        args.extend(rest);
+        args
+    },
+};
+
+// ---------------------------------------------------------------------------
+// statements
+// ---------------------------------------------------------------------------
+//
+// The C1 grammar contains the famous "dangling else" ambiguity:
+//
+//     if (a) if (b) x = 1; else x = 2;
+//
+// The `else` could belong to either `if`. As in C, it has to belong to the
+// innermost `if` (i.e. the conflict is resolved in favor of shifting).
+//
+// Since LALRPOP has no precedence annotations for rules, the ambiguity is
+// removed by splitting statements into two kinds:
+//
+// - A `ClosedStatement` is one where every `if` has a matching `else`, so it
+//   can safely appear between an `if` and an `else`.
+// - An `OpenStatement` contains at least one `if` without `else` at its end.
+//
+// Only a closed statement may stand before an `else`, so an `else` can never
+// be attached to an outer `if` when an inner one is still missing its `else`.
+// Loops end with a statement as well, so they are split the same way. The
+// language and the resulting AST are unchanged.
+
+Statement: ast::Stmt = {
+    OpenStatement,
+    ClosedStatement,
+};
+
+OpenStatement: ast::Stmt = {
+    "if" <cond:Condition> <if_true:Statement> => ast::Stmt::If(ast::IfStmt {
+        cond,
+        if_true: Box::new(if_true),
+        if_false: None,
+    }),
+    "if" <cond:Condition> <if_true:ClosedStatement> "else" <if_false:OpenStatement> =>
+        ast::Stmt::If(ast::IfStmt {
+            cond,
+            if_true: Box::new(if_true),
+            if_false: Some(Box::new(if_false)),
+        }),
+    "while" <cond:Condition> <body:OpenStatement> => ast::Stmt::While(ast::WhileStmt {
+        cond,
+        body: Box::new(body),
+    }),
+    <head:ForHead> <body:OpenStatement> => {
+        let (init, cond, update) = head;
+        ast::Stmt::For(ast::ForStmt { init, cond, update, body: Box::new(body) })
+    },
+};
+
+ClosedStatement: ast::Stmt = {
+    SimpleStatement,
+    "if" <cond:Condition> <if_true:ClosedStatement> "else" <if_false:ClosedStatement> =>
+        ast::Stmt::If(ast::IfStmt {
+            cond,
+            if_true: Box::new(if_true),
+            if_false: Some(Box::new(if_false)),
+        }),
+    "while" <cond:Condition> <body:ClosedStatement> => ast::Stmt::While(ast::WhileStmt {
+        cond,
+        body: Box::new(body),
+    }),
+    <head:ForHead> <body:ClosedStatement> => {
+        let (init, cond, update) = head;
+        ast::Stmt::For(ast::ForStmt { init, cond, update, body: Box::new(body) })
+    },
+};
+
+// Statements that don't end with a nested statement.
+SimpleStatement: ast::Stmt = {
+    <DoWhileStatement> ";",
+    <ReturnStatement> ";",
+    <Print> ";",
+    <DeclAssignment> ";" => ast::Stmt::VarDef(<>),
+    <StatAssignment> ";" => ast::Stmt::Assign(<>),
+    <FunctionCall> ";" => ast::Stmt::Call(<>),
+    Block => ast::Stmt::Block(<>),
+    ";" => ast::Stmt::Empty,
+};
+
+Block: ast::Block = {
+    "{" <statements:Statement*> "}" => ast::Block { statements },
+};
+
+Condition: ast::Expr = {
+    "(" <Assignment> ")",
+};
+
+// Everything of a for statement except for its body.
+ForHead: (ast::ForInit, ast::Expr, ast::Assign) = {
+    "for" "(" <ForInit> ";" <Expr> ";" <StatAssignment> ")",
+};
+
+ForInit: ast::ForInit = {
+    StatAssignment => ast::ForInit::Assign(<>),
+    DeclAssignment => ast::ForInit::VarDef(<>),
+};
+
+// The body is followed by `while`, never by `else`, so it may be any statement.
+DoWhileStatement: ast::Stmt = {
+    "do" <body:Statement> "while" <cond:Condition> => ast::Stmt::DoWhile(ast::WhileStmt {
+        cond,
+        body: Box::new(body),
+    }),
+};
+
+ReturnStatement: ast::Stmt = {
+    "return" <Assignment?> => ast::Stmt::Return(<>),
+};
+
+Print: ast::Stmt = {
+    "print" "(" <exprs:Arguments> ")" => ast::Stmt::Print(ast::PrintStmt { exprs }),
+};
+
+DeclAssignment: ast::VarDef = {
+    <data_type:Type> <ident:Ident> <init:("=" <Assignment>)?> => ast::VarDef {
+        data_type,
+        res_ident: ast::ResIdent::new(ident),
+        init,
+    },
+};
+
+Type: ast::DataType = {
+    "bool" => ast::DataType::Bool,
+    "float" => ast::DataType::Float,
+    "int" => ast::DataType::Int,
+    "void" => ast::DataType::Void,
+};
+
+// ---------------------------------------------------------------------------
+// expressions
+// ---------------------------------------------------------------------------
+
+StatAssignment: ast::Assign = {
+    <ident:Ident> "=" <rhs:Assignment> => ast::Assign {
+        lhs: ast::ResIdent::new(ident),
+        rhs: Box::new(rhs),
+    },
+};
+
+// Assignments are right-associative: `a = b = 1` is `a = (b = 1)`.
+Assignment: ast::Expr = {
+    StatAssignment => ast::Expr::Assign(<>),
+    Expr,
+};
+
+// Comparisons are non-associative: `1 < 2 < 3` is a syntax error.
+Expr: ast::Expr = {
+    <lhs:SimpExpr> <op:CompareOp> <rhs:SimpExpr> => ast::Expr::BinaryOp(ast::BinOpExpr {
+        op,
+        lhs: Box::new(lhs),
+        rhs: Box::new(rhs),
+    }),
+    SimpExpr,
+};
+
+// The left recursion in `SimpExpr` and `Term` makes the binary operators
+// left-associative: `1 - 2 - 3` is parsed as `(1 - 2) - 3`.
+SimpExpr: ast::Expr = {
+    <lhs:SimpExpr> <op:AddOp> <rhs:Term> => ast::Expr::BinaryOp(ast::BinOpExpr {
+        op,
+        lhs: Box::new(lhs),
+        rhs: Box::new(rhs),
+    }),
+    Term,
+};
+
+Term: ast::Expr = {
+    <lhs:Term> <op:MulOp> <rhs:Factor> => ast::Expr::BinaryOp(ast::BinOpExpr {
+        op,
+        lhs: Box::new(lhs),
+        rhs: Box::new(rhs),
+    }),
+    Factor,
+};
+
+Factor: ast::Expr = {
+    "-" <Factor> => ast::Expr::UnaryMinus(Box::new(<>)),
+    "int_literal" => ast::Expr::Literal(ast::Literal::Int(<>)),
+    "float_literal" => ast::Expr::Literal(ast::Literal::Float(<>)),
+    "bool_literal" => ast::Expr::Literal(ast::Literal::Bool(<>)),
+    "string_literal" => ast::Expr::Literal(ast::Literal::String(<>)),
+    Ident => ast::Expr::Var(ast::ResIdent::new(<>)),
+    FunctionCall => ast::Expr::Call(<>),
+    "(" <Assignment> ")",
+};
+
+CompareOp: ast::BinOp = {
+    "==" => ast::BinOp::Eq,
+    "!=" => ast::BinOp::Neq,
+    "<=" => ast::BinOp::Leq,
+    ">=" => ast::BinOp::Geq,
+    "<" => ast::BinOp::Lt,
+    ">" => ast::BinOp::Gt,
+};
+
+AddOp: ast::BinOp = {
+    "+" => ast::BinOp::Add,
+    "-" => ast::BinOp::Sub,
+    "||" => ast::BinOp::LogOr,
+};
+
+MulOp: ast::BinOp = {
+    "*" => ast::BinOp::Mul,
+    "/" => ast::BinOp::Div,
+    "&&" => ast::BinOp::LogAnd,
+};
+
+Ident: ast::Ident = {
+    "ident" => ast::Ident(<>),
+};
