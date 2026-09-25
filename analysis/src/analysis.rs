@@ -107,8 +107,6 @@
 //! println!("{error}");
 //! ```
 
-#![allow(unused_variables, dead_code)]
-
 use std::ops::Index;
 use std::fmt;
 
@@ -145,9 +143,8 @@ pub fn analyze(root: &mut ast::Program) -> Result<ProgramInfo, AnalysisError> {
         analyzer.visit_item(item_id, item)?;
     }
 
-    // TODO: resolve and check main function
-    let main_func = None;
-    Ok(analyzer.tab.into_program_info(main_func))
+    let main_func = analyzer.check_main_func()?;
+    Ok(analyzer.tab.into_program_info(Some(main_func)))
 }
 
 /// The visitor that drives the semantic analysis pass.
@@ -158,6 +155,30 @@ pub struct Analyzer {
 }
 
 impl Analyzer {
+    /// Resolves the `main` function and checks its signature.
+    ///
+    /// There must be a function `main` without parameters and with return type `void`.
+    fn check_main_func(&self) -> Result<FuncDefId, AnalysisError> {
+        let Ok(def_id) = self.tab.resolve("main") else {
+            return Err(AnalysisError::new("cannot find main function"));
+        };
+        let DefInfo::Func(func_info) = &self.tab[def_id] else {
+            return Err(AnalysisError::new("main is not a function"));
+        };
+
+        if func_info.return_type != ast::DataType::Void {
+            return Err(AnalysisError(format!(
+                "the return type of main must be `void`, but it is `{}`",
+                func_info.return_type,
+            )));
+        }
+        if func_info.param_count() != 0 {
+            return Err(AnalysisError::new("the main function must not have parameters"));
+        }
+
+        Ok(FuncDefId(def_id))
+    }
+
     /// Analyzes an item.
     fn visit_item(
         &mut self,
@@ -180,7 +201,12 @@ impl Analyzer {
     ) -> Result<(), AnalysisError> {
         self.visit_var_def(var_def, "global variable")?;
 
-        // TODO: define global variable in symbol table and set resolution
+        // The variable is defined after its initializer was analyzed, so the
+        // initializer can't refer to the variable itself.
+        let def_id = self
+            .tab
+            .define_global_var(&var_def.res_ident, var_def.data_type, item_id)?;
+        var_def.res_ident.set_res(def_id);
 
         Ok(())
     }
@@ -189,7 +215,12 @@ impl Analyzer {
     fn visit_local_var_def(&mut self, var_def: &mut ast::VarDef) -> Result<(), AnalysisError> {
         self.visit_var_def(var_def, "local variable")?;
 
-        // TODO: define local variable in symbol table and set resolution
+        // The variable is defined after its initializer was analyzed, so the
+        // initializer can't refer to the variable itself.
+        let def_id = self
+            .tab
+            .define_local_var(&var_def.res_ident, var_def.data_type)?;
+        var_def.res_ident.set_res(def_id);
 
         Ok(())
     }
@@ -205,7 +236,12 @@ impl Analyzer {
         var_def: &mut ast::VarDef,
         kind: &str,
     ) -> Result<(), AnalysisError> {
-        // TODO: check data type
+        if var_def.data_type == ast::DataType::Void {
+            return Err(AnalysisError(format!(
+                "cannot define {kind} {} with type `void`",
+                var_def.res_ident,
+            )));
+        }
 
         let Some(init) = &mut var_def.init else {
             return Ok(());
@@ -213,7 +249,12 @@ impl Analyzer {
 
         let init_type = self.visit_expr(init)?;
 
-        // TODO: check initializer compatibility
+        if !Self::is_compatible(init_type, var_def.data_type) {
+            return Err(AnalysisError(format!(
+                "cannot initialize variable {} of type `{}` with value of type `{init_type}`",
+                var_def.res_ident, var_def.data_type,
+            )));
+        }
 
         Ok(())
     }
@@ -231,14 +272,30 @@ impl Analyzer {
             .unwrap_or_else(|_| panic!("function {} should have been defined in pre-pass", func_def.ident));
         self.tab.set_current_func(FuncDefId(def_id));
 
-        // TODO: handle scope, visit parameters and statements
+        // Parameters and the function body share one scope, so a local
+        // variable can't redefine a parameter.
+        self.tab.scope_enter();
+        for param in &func_def.params {
+            self.visit_func_param(param)?;
+        }
+        for stmt in &mut func_def.statements {
+            self.visit_stmt(stmt)?;
+        }
+        self.tab.scope_leave();
 
         Ok(())
     }
 
     /// Analyzes a function parameter.
     fn visit_func_param(&mut self, param: &ast::FuncParam) -> Result<(), AnalysisError> {
-        // TODO: check data type and define parameter
+        if param.data_type == ast::DataType::Void {
+            return Err(AnalysisError(format!(
+                "cannot define function parameter {} with type `void`",
+                param.ident,
+            )));
+        }
+
+        self.tab.define_local_var(&param.ident, param.data_type)?;
 
         Ok(())
     }
@@ -268,7 +325,11 @@ impl Analyzer {
 
     /// Analyzes a block statement.
     fn visit_block(&mut self, block: &mut ast::Block) -> Result<(), AnalysisError> {
-        // TODO: handle scope and visit statements
+        self.tab.scope_enter();
+        for stmt in &mut block.statements {
+            self.visit_stmt(stmt)?;
+        }
+        self.tab.scope_leave();
 
         Ok(())
     }
@@ -285,7 +346,18 @@ impl Analyzer {
 
     /// Analyzes a `for` statement.
     fn visit_for_stmt(&mut self, stmt: &mut ast::ForStmt) -> Result<(), AnalysisError> {
-        // TODO: handle scope and visit init, cond, update, body
+        // A variable defined in the initializer is only visible inside the loop.
+        self.tab.scope_enter();
+        match &mut stmt.init {
+            ast::ForInit::VarDef(var_def) => self.visit_local_var_def(var_def)?,
+            ast::ForInit::Assign(assign) => {
+                self.visit_assign(assign)?;
+            }
+        }
+        self.visit_cond_expr(&mut stmt.cond, "for loop")?;
+        self.visit_assign(&mut stmt.update)?;
+        self.visit_stmt(&mut stmt.body)?;
+        self.tab.scope_leave();
 
         Ok(())
     }
@@ -313,10 +385,22 @@ impl Analyzer {
         if let Some(expr) = expr {
             let expr_type = self.visit_expr(expr)?;
 
-            // TODO: check return type compatibility
+            // `void` functions must not return anything, not even `void` values.
+            if func_return_type == ast::DataType::Void {
+                return Err(AnalysisError::new(
+                    "cannot `return` with value in function returning `void`",
+                ));
+            }
+            if !Self::is_compatible(expr_type, func_return_type) {
+                return Err(AnalysisError(format!(
+                    "cannot return value of type `{expr_type}` from function returning `{func_return_type}`",
+                )));
+            }
+        } else if func_return_type != ast::DataType::Void {
+            return Err(AnalysisError(format!(
+                "cannot `return;` without value in function returning `{func_return_type}`",
+            )));
         }
-
-        // TODO: check return without value in non-void function
 
         Ok(())
     }
@@ -326,7 +410,9 @@ impl Analyzer {
         for expr in &mut print.exprs {
             let expr_type = self.visit_expr(expr)?;
 
-            // TODO: check data type
+            if expr_type == ast::DataType::Void {
+                return Err(AnalysisError::new("cannot `print` value of type `void`"));
+            }
         }
 
         Ok(())
@@ -334,20 +420,71 @@ impl Analyzer {
 
     /// Analyzes a call statement or expression and returns its return type.
     fn visit_call(&mut self, call: &mut ast::FuncCall) -> Result<ast::DataType, AnalysisError> {
+        let mut arg_types = Vec::with_capacity(call.args.len());
         for expr in &mut call.args {
-            let _expr_type = self.visit_expr(expr)?;
+            arg_types.push(self.visit_expr(expr)?);
         }
 
-        // TODO: compute and check data type
-        Ok(ast::DataType::Void)
+        let def_id = self.tab.resolve(&call.res_ident)?;
+        call.res_ident.set_res(def_id);
+
+        // The call operator can only be applied to functions.
+        let DefInfo::Func(func_info) = &self.tab[def_id] else {
+            return Err(AnalysisError(format!(
+                "cannot call variable {}",
+                call.res_ident,
+            )));
+        };
+
+        if arg_types.len() != func_info.param_count() {
+            return Err(AnalysisError(format!(
+                "incorrect number of arguments in call to {}, expected {}, found {}",
+                call.res_ident,
+                func_info.param_count(),
+                arg_types.len(),
+            )));
+        }
+
+        let params = func_info.param_types.iter();
+        for (index, (&arg_type, &param_type)) in arg_types.iter().zip(params).enumerate() {
+            if !Self::is_compatible(arg_type, param_type) {
+                return Err(AnalysisError(format!(
+                    "incorrect type for argument {index} in call to {}, expected `{param_type}`, found `{arg_type}`",
+                    call.res_ident,
+                )));
+            }
+        }
+
+        Ok(func_info.return_type)
     }
 
     /// Analyzes an assignment statement or expression and returns its type.
     fn visit_assign(&mut self, assign: &mut ast::Assign) -> Result<ast::DataType, AnalysisError> {
         let rhs_type = self.visit_expr(&mut assign.rhs)?;
 
-        // TODO: compute and check data type
-        Ok(ast::DataType::Void)
+        let def_id = self.tab.resolve(&assign.lhs)?;
+        assign.lhs.set_res(def_id);
+
+        // Only variables can be assigned to.
+        let lhs_type = match &self.tab[def_id] {
+            DefInfo::GlobalVar(var_info) | DefInfo::LocalVar(var_info) => var_info.data_type,
+            DefInfo::Func(_) => {
+                return Err(AnalysisError(format!(
+                    "cannot assign to function {}",
+                    assign.lhs,
+                )));
+            }
+        };
+
+        if !Self::is_compatible(rhs_type, lhs_type) {
+            return Err(AnalysisError(format!(
+                "cannot assign value of type `{rhs_type}` to variable {} of type `{lhs_type}`",
+                assign.lhs,
+            )));
+        }
+
+        // The type of an assignment is the type of the variable.
+        Ok(lhs_type)
     }
 
     /// Analyzes the condition expression of a control flow statement, expecting
@@ -357,7 +494,11 @@ impl Analyzer {
     fn visit_cond_expr(&mut self, expr: &mut ast::Expr, kind: &str) -> Result<(), AnalysisError> {
         let cond_type = self.visit_expr(expr)?;
 
-        // TODO: check the condition type
+        if cond_type != ast::DataType::Bool {
+            return Err(AnalysisError(format!(
+                "condition of {kind} must have type `bool`, found `{cond_type}`",
+            )));
+        }
 
         Ok(())
     }
@@ -381,9 +522,48 @@ impl Analyzer {
     ) -> Result<ast::DataType, AnalysisError> {
         let lhs_type = self.visit_expr(&mut bin_op_expr.lhs)?;
         let rhs_type = self.visit_expr(&mut bin_op_expr.rhs)?;
+        let op = bin_op_expr.op;
 
-        // TODO: compute and check data type
-        Ok(ast::DataType::Void)
+        // Both operands must be compatible with each other, the operator is
+        // then checked against their common type.
+        let Some(common_type) = Self::least_upper_bound(lhs_type, rhs_type) else {
+            return Err(AnalysisError(format!(
+                "cannot apply binary operator to incompatible types: `{lhs_type} {op} {rhs_type}`",
+            )));
+        };
+
+        match op {
+            ast::BinOp::Add | ast::BinOp::Sub | ast::BinOp::Mul | ast::BinOp::Div => {
+                if !common_type.is_numeric() {
+                    return Err(AnalysisError(format!(
+                        "cannot use arithmetic operator `{op}` with values of type `{common_type}`",
+                    )));
+                }
+                // `float` if one of the operands is `float`, `int` otherwise.
+                Ok(common_type)
+            }
+            ast::BinOp::LogAnd | ast::BinOp::LogOr => {
+                if common_type != ast::DataType::Bool {
+                    return Err(AnalysisError(format!(
+                        "cannot use logical operator `{op}` with values of type `{common_type}`",
+                    )));
+                }
+                Ok(ast::DataType::Bool)
+            }
+            ast::BinOp::Eq
+            | ast::BinOp::Neq
+            | ast::BinOp::Lt
+            | ast::BinOp::Gt
+            | ast::BinOp::Leq
+            | ast::BinOp::Geq => {
+                if common_type == ast::DataType::Void {
+                    return Err(AnalysisError(format!(
+                        "cannot use comparison operator `{op}` with values of type `{common_type}`",
+                    )));
+                }
+                Ok(ast::DataType::Bool)
+            }
+        }
     }
 
     /// Analyzes an unary minus expression and returns its type.
@@ -393,8 +573,13 @@ impl Analyzer {
     ) -> Result<ast::DataType, AnalysisError> {
         let inner_type = self.visit_expr(inner_expr)?;
 
-        // TODO: compute and check data type
-        Ok(ast::DataType::Void)
+        if !inner_type.is_numeric() {
+            return Err(AnalysisError(format!(
+                "cannot apply unary minus to type `{inner_type}`",
+            )));
+        }
+
+        Ok(inner_type)
     }
 
     /// Analyzes a variable expression and returns its type.
@@ -402,12 +587,38 @@ impl Analyzer {
         &mut self,
         res_ident: &mut ast::ResIdent,
     ) -> Result<ast::DataType, AnalysisError> {
-        // TODO: compute and check data type
-        Ok(ast::DataType::Void)
+        let def_id = self.tab.resolve(res_ident)?;
+        res_ident.set_res(def_id);
+
+        // Function identifiers are only valid expressions when called.
+        match &self.tab[def_id] {
+            DefInfo::GlobalVar(var_info) | DefInfo::LocalVar(var_info) => Ok(var_info.data_type),
+            DefInfo::Func(_) => Err(AnalysisError(format!(
+                "cannot load function {res_ident} as a value",
+            ))),
+        }
     }
 
-    // TODO: implement helper methods for type compatibility checking
-    // and least upper bound computation
+    /// Returns whether a value of type `from` can be used where a value of
+    /// type `to` is expected, i.e. whether the types are identical or `from`
+    /// can be implicitly converted to `to`.
+    ///
+    /// The only implicit conversion in C1 is from `int` to `float`.
+    fn is_compatible(from: ast::DataType, to: ast::DataType) -> bool {
+        from == to || (from == ast::DataType::Int && to == ast::DataType::Float)
+    }
+
+    /// Returns the smallest type that both types are compatible with, or
+    /// `None` if the types are incompatible with each other.
+    fn least_upper_bound(a: ast::DataType, b: ast::DataType) -> Option<ast::DataType> {
+        if Self::is_compatible(a, b) {
+            Some(b)
+        } else if Self::is_compatible(b, a) {
+            Some(a)
+        } else {
+            None
+        }
+    }
 }
 
 /// The top-level type that contains all program information that is collected during analysis.
@@ -468,6 +679,12 @@ impl Index<FuncDefId> for ProgramInfo {
 /// A human-readable compile-time error.
 #[derive(Debug, Clone, PartialEq)]
 pub struct AnalysisError(String);
+
+impl AnalysisError {
+    fn new(msg: &str) -> Self {
+        AnalysisError(msg.to_owned())
+    }
+}
 
 impl fmt::Display for AnalysisError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
