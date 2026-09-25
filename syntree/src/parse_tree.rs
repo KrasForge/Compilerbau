@@ -90,44 +90,62 @@ impl Root {
 	/// 
 	/// [reverse polish notation]: https://en.wikipedia.org/wiki/Reverse_Polish_notation
 	pub fn from_str(str: &str) -> Result<Self, Error> {
-		// TODO: Funktionskörper vervollständigen
 		let mut stmt_list = Vec::new();
-		let mut expr_stack = Vec::new();
-		
+		let mut expr_stack: Vec<Expr> = Vec::new();
+
+		/// Pops the two topmost operands (lhs below rhs) from the stack.
+		fn pop_operands(stack: &mut Vec<Expr>) -> Result<(Expr, Expr), Error> {
+			let rhs = stack.pop().ok_or(Error::Syntax)?;
+			let lhs = stack.pop().ok_or(Error::Syntax)?;
+			Ok((lhs, rhs))
+		}
+
+		/// Replaces the two topmost operands by a binary operator node.
+		fn push_binary(
+			stack: &mut Vec<Expr>,
+			node: fn(Box<Expr>, Box<Expr>) -> Expr,
+		) -> Result<(), Error> {
+			let (lhs, rhs) = pop_operands(stack)?;
+			stack.push(node(Box::new(lhs), Box::new(rhs)));
+			Ok(())
+		}
+
 		for c in str.chars() {
 			match c {
 				c if c.is_whitespace() => {}
-				c if c.is_digit(10) => {
-					todo!("Ziffer in Zahl konvertieren und auf den Stapel legen")
+				c if c.is_ascii_digit() => {
+					let digit = c.to_digit(10).ok_or(Error::Lexical)?;
+					expr_stack.push(Expr::Int(i64::from(digit)));
 				}
 				c if c.is_ascii_lowercase() => {
-					todo!("Variablenname auf den Stapel legen")
+					expr_stack.push(Expr::Var(c));
 				}
-				'+' => {
-					todo!("Additionsknoten auf den Stapel legen")
-				}
-				'-' => {
-					todo!("Subtraktionsknoten auf den Stapel legen")
-				}
-				'*' => {
-					todo!("Multiplikationsknoten auf den Stapel legen")
-				}
-				'/' => {
-					todo!("Divisionsknoten auf den Stapel legen")
-				}
+				'+' => push_binary(&mut expr_stack, Expr::Add)?,
+				'-' => push_binary(&mut expr_stack, Expr::Sub)?,
+				'*' => push_binary(&mut expr_stack, Expr::Mul)?,
+				'/' => push_binary(&mut expr_stack, Expr::Div)?,
 				'=' => {
-					todo!("Zuweisungsknoten auf den Stapel legen");
+					let (lhs, rhs) = pop_operands(&mut expr_stack)?;
+					let Expr::Var(name) = lhs else {
+						return Err(Error::Semantic);
+					};
+					// an assignment is a statement of its own and can't be
+					// used as an operand, so nothing may be left dangling
+					if !expr_stack.is_empty() {
+						return Err(Error::Syntax);
+					}
+					stmt_list.push(Stmt::Set(name, rhs));
 				}
-				_ => todo!("geeigneten Fehlercode zurückgeben"),
+				_ => return Err(Error::Lexical),
 			}
 		}
-		
+
 		if let Some(expr) = expr_stack.pop() {
 			stmt_list.push(Stmt::Expr(expr));
 		}
-		
+
 		if !expr_stack.is_empty() {
-			todo!("geeigneten Fehlercode zurückgeben")
+			Err(Error::Syntax)
 		} else {
 			Ok(Root { stmt_list })
 		}

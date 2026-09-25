@@ -30,19 +30,67 @@ use crate::parse_tree::*;
 /// ```
 #[derive(Default)]
 pub struct Calculator {
-	// TODO: eventuell notwendige Attribute aufnehmen
+	/// Values of the variables 'a' to 'z'; unassigned variables read as 0.
+	vars: [i64; 26],
+	/// Operand stack holding intermediate results during evaluation.
+	stack: Vec<i64>,
+	/// Value of the most recently evaluated statement.
+	result: i64,
 }
 
 impl Calculator {
 	/// Evaluates the entire parse tree starting from a [`Root`] and returns the
 	/// result of the last expression evaluated.
-	pub fn calc(&mut self, _t: &Root) -> i64 {
-		todo!("Ergebnis durch Ablaufen des Baums bestimmen")
+	pub fn calc(&mut self, t: &Root) -> i64 {
+		self.visit_root(t);
+		self.result
+	}
+	
+	/// Maps a variable name to its slot in `vars`.
+	fn slot(name: char) -> usize {
+		assert!(name.is_ascii_lowercase(), "invalid variable name {name:?}");
+		(name as u8 - b'a') as usize
+	}
+	
+	/// Evaluates a binary operation on the results of both operands.
+	fn binary(&mut self, lhs: &Expr, rhs: &Expr, op: fn(i64, i64) -> i64) {
+		self.visit_expr(lhs);
+		self.visit_expr(rhs);
+		let r = self.pop();
+		let l = self.pop();
+		self.stack.push(op(l, r));
+	}
+	
+	fn pop(&mut self) -> i64 {
+		self.stack.pop().expect("operand stack underflow")
 	}
 }
 
 impl Visitor for Calculator {
-	// TODO: relevante Methoden überschreiben
+	fn visit_stmt(&mut self, s: &Stmt) {
+		match s {
+			Stmt::Expr(e) => {
+				self.visit_expr(e);
+				self.result = self.pop();
+			}
+			Stmt::Set(name, e) => {
+				self.visit_expr(e);
+				self.result = self.pop();
+				self.vars[Self::slot(*name)] = self.result;
+			}
+		}
+	}
+	
+	fn visit_expr(&mut self, e: &Expr) {
+		match e {
+			Expr::Int(n) => self.stack.push(*n),
+			Expr::Var(name) => self.stack.push(self.vars[Self::slot(*name)]),
+			Expr::Add(lhs, rhs) => self.binary(lhs, rhs, |l, r| l + r),
+			Expr::Sub(lhs, rhs) => self.binary(lhs, rhs, |l, r| l - r),
+			Expr::Mul(lhs, rhs) => self.binary(lhs, rhs, |l, r| l * r),
+			Expr::Div(lhs, rhs) => self.binary(lhs, rhs, |l, r| l / r),
+		}
+	}
 }
 
 // unit-tests

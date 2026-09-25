@@ -44,7 +44,8 @@ use crate::parse_tree::*;
 /// ```
 #[derive(Default)]
 pub struct Printer {
-	// TODO: eventuell notwendige Attribute aufnehmen
+	/// The formatted output accumulated so far.
+	out: String,
 }
 
 impl Printer {
@@ -54,13 +55,53 @@ impl Printer {
 	/// Traverses the tree, visiting each statement and expression to generate
 	/// formatted strings, and then concatenates these strings into a single
 	/// result separated by newlines.
-	pub fn format(&mut self, _t: &Root) -> String {
-		todo!("Zeichenkette durch Ablaufen des Baums bestimmen")
+	pub fn format(&mut self, t: &Root) -> String {
+		self.out.clear();
+		self.visit_root(t);
+		std::mem::take(&mut self.out)
+	}
+	
+	/// Emits a parenthesized binary operation.
+	fn binary(&mut self, lhs: &Expr, op: char, rhs: &Expr) {
+		self.out.push('(');
+		self.visit_expr(lhs);
+		self.out.push(op);
+		self.visit_expr(rhs);
+		self.out.push(')');
 	}
 }
 
 impl Visitor for Printer {
-	// TODO: relevante Methoden überschreiben
+	fn visit_root(&mut self, r: &Root) {
+		for (i, stmt) in r.stmt_list.iter().enumerate() {
+			if i > 0 {
+				self.out.push('\n');
+			}
+			self.visit_stmt(stmt);
+		}
+	}
+	
+	fn visit_stmt(&mut self, s: &Stmt) {
+		match s {
+			Stmt::Expr(e) => self.visit_expr(e),
+			Stmt::Set(name, e) => {
+				self.out.push(*name);
+				self.out.push('=');
+				self.visit_expr(e);
+			}
+		}
+	}
+	
+	fn visit_expr(&mut self, e: &Expr) {
+		match e {
+			Expr::Int(n) => self.out.push_str(&n.to_string()),
+			Expr::Var(name) => self.out.push(*name),
+			Expr::Add(lhs, rhs) => self.binary(lhs, '+', rhs),
+			Expr::Sub(lhs, rhs) => self.binary(lhs, '-', rhs),
+			Expr::Mul(lhs, rhs) => self.binary(lhs, '*', rhs),
+			Expr::Div(lhs, rhs) => self.binary(lhs, '/', rhs),
+		}
+	}
 }
 
 // unit-tests
