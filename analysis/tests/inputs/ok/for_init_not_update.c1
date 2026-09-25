@@ -1,0 +1,12 @@
+// The for initializer and update are not required to have the same type.
+
+void main() {
+  bool b;
+  int i;
+  for (int j; false; b = false)
+    ;
+  for (int j = 1; false; b = false)
+    ;
+  for (i = 1; false; b = false)
+    ;
+}

@@ -1,0 +1,3 @@
+void nothing() {}
+int something() { return nothing(); }
+void main() {}

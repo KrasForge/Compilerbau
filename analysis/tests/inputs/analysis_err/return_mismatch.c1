@@ -1,0 +1,5 @@
+// Test that the return type conversion doesn't go the wrong way.
+
+int answer() { return 42.0; }
+
+void main() {}

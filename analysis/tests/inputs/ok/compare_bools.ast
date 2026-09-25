@@ -1,0 +1,384 @@
+Program {
+    items: [
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "main",
+                ),
+                params: [],
+                statements: [
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Lt,
+                                        lhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Lt,
+                                        lhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Lt,
+                                        lhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Lt,
+                                        lhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    String(
+                                        "---",
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Gt,
+                                        lhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Gt,
+                                        lhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Gt,
+                                        lhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Gt,
+                                        lhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    String(
+                                        "---",
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Leq,
+                                        lhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Leq,
+                                        lhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Leq,
+                                        lhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Leq,
+                                        lhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    String(
+                                        "---",
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Geq,
+                                        lhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Geq,
+                                        lhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Geq,
+                                        lhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                false,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Geq,
+                                        lhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Bool(
+                                                true,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                ],
+            },
+        ),
+    ],
+}
