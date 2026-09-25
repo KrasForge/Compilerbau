@@ -74,118 +74,137 @@ use logos::{Logos, SpannedIter};
 /// Note that whitespace and comments will not be returned by the [`Lexer`].
 #[derive(Logos, Debug, Clone, PartialEq)]
 pub enum Token {
-    // TODO
+    // keywords
+    #[token("bool")]
     KwBool,
 
-    // TODO
+    #[token("do")]
     KwDo,
 
-    // TODO
+    #[token("else")]
     KwElse,
 
-    // TODO
+    #[token("float")]
     KwFloat,
 
-    // TODO
+    #[token("for")]
     KwFor,
 
-    // TODO
+    #[token("if")]
     KwIf,
 
-    // TODO
+    #[token("int")]
     KwInt,
 
-    // TODO
+    #[token("print")]
     KwPrint,
 
-    // TODO
+    #[token("return")]
     KwReturn,
 
-    // TODO
+    #[token("void")]
     KwVoid,
 
-    // TODO
+    #[token("while")]
     KwWhile,
 
-    // TODO
+    // arithmetic operators
+    #[token("+")]
     Add,
 
-    // TODO
+    #[token("-")]
     Sub,
 
-    // TODO
+    #[token("*")]
     Mul,
 
-    // TODO
+    #[token("/")]
     Div,
 
-    // TODO
+    #[token("=")]
     Assign,
 
-    // TODO
+    // comparison operators
+    #[token("==")]
     Eq,
 
-    // TODO
+    #[token("!=")]
     Neq,
 
-    // TODO
+    #[token("<")]
     Lt,
 
-    // TODO
+    #[token(">")]
     Gt,
 
-    // TODO
+    #[token("<=")]
     Leq,
 
-    // TODO
+    #[token(">=")]
     Geq,
 
-    // TODO
+    // logical operators
+    #[token("&&")]
     LogAnd,
 
-    // TODO
+    #[token("||")]
     LogOr,
 
-    // TODO
+    // separators
+    #[token(",")]
     Comma,
 
-    // TODO
+    #[token(";")]
     Semicolon,
 
-    // TODO
+    #[token("(")]
     LParen,
 
-    // TODO
+    #[token(")")]
     RParen,
 
-    // TODO
+    #[token("{")]
     LBrace,
 
-    // TODO
+    #[token("}")]
     RBrace,
 
-    // TODO
+    /// Non-empty sequence of decimal digits. Values that don't fit into an
+    /// `i64` are reported as lexical errors.
+    #[regex(r"[0-9]+", |lex| lex.slice().parse::<i64>().ok())]
     IntLiteral(i64),
 
-    // TODO
+    /// Digits containing a `.` that is not the last character, optionally
+    /// followed by an exponent; with an exponent the `.` is optional.
+    #[regex(r"[0-9]*\.[0-9]+([eE][+-]?[0-9]+)?", |lex| lex.slice().parse::<f64>().ok())]
+    #[regex(r"[0-9]+[eE][+-]?[0-9]+", |lex| lex.slice().parse::<f64>().ok())]
     FloatLiteral(f64),
 
-    // TODO
+    #[token("true", |_| true)]
+    #[token("false", |_| false)]
     BoolLiteral(bool),
 
-    // TODO
+    /// Characters other than quotes and line breaks, enclosed in `"`.
+    /// The value excludes the surrounding quotes.
+    #[regex(r#""[^"\r\n]*""#, |lex| {
+        let slice = lex.slice();
+        slice[1..slice.len() - 1].to_owned()
+    })]
     StringLiteral(String),
 
-    // TODO
+    /// Letters, digits and underscores, not starting with a digit.
+    #[regex(r"[a-zA-Z_][a-zA-Z0-9_]*", |lex| lex.slice().to_owned())]
     Ident(String),
 
-    // TODO
+    /// C-style comment from `/*` to the next `*/` (no nesting).
+    #[regex(r"/\*([^*]|\*+[^*/])*\*+/", logos::skip)]
     BlockComment,
 
-    // TODO
+    /// C++-style comment from `//` to the end of the line.
+    #[regex(r"//[^\r\n]*", logos::skip, allow_greedy = true)]
     LineComment,
 
-    #[regex(r"[ \t\n\f]+", logos::skip)]
+    #[regex(r"[ \t\r\n\f]+", logos::skip)]
     Whitespace,
 }
 
