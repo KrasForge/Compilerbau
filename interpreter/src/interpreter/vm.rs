@@ -148,6 +148,31 @@ impl VirtualMachine {
         *variable = Variable::Init(value.clone());
         value
     }
+
+    /// Marks a variable as uninitialized.
+    ///
+    /// This is needed when a definition without initializer is executed
+    /// repeatedly, e.g. in a loop body, so that reading the variable doesn't
+    /// return the value of a previous iteration.
+    ///
+    /// # Panics
+    /// Panics if attempting to reset a function or referring to a local
+    /// variable from the global scope.
+    pub fn reset_var(&mut self, info: &analysis::DefInfo) {
+        let variable = match info {
+            analysis::DefInfo::GlobalVar(info) => &mut self.global_vars[info.offset],
+
+            analysis::DefInfo::LocalVar(info) => &mut self
+                .local_vars
+                .last_mut()
+                .expect("attempted to reset a local variable outside of function")
+                [info.offset],
+
+            analysis::DefInfo::Func(_) => unreachable!("attempted to reset a function"),
+        };
+
+        *variable = Variable::Uninit;
+    }
 }
 
 /// A memory location. This represents a (global or local) variable
