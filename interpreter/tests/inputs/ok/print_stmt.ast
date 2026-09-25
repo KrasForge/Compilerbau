@@ -1,0 +1,118 @@
+Program {
+    items: [
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "main",
+                ),
+                params: [],
+                statements: [
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    String(
+                                        "String",
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    Int(
+                                        1234567,
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                UnaryMinus(
+                                    Literal(
+                                        Int(
+                                            1,
+                                        ),
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    Float(
+                                        1.5,
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                UnaryMinus(
+                                    Literal(
+                                        Float(
+                                            0.0,
+                                        ),
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    Float(
+                                        1.23e47,
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    Float(
+                                        1.23e-43,
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    Bool(
+                                        true,
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    Bool(
+                                        false,
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                ],
+            },
+        ),
+    ],
+}

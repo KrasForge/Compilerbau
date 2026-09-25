@@ -1,0 +1,34 @@
+Program {
+    items: [
+        Func(
+            FuncDef {
+                return_type: Int,
+                ident: Ident(
+                    "answer",
+                ),
+                params: [],
+                statements: [
+                    Return(
+                        Some(
+                            Literal(
+                                Float(
+                                    42.0,
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "main",
+                ),
+                params: [],
+                statements: [],
+            },
+        ),
+    ],
+}

@@ -1,0 +1,8 @@
+void main() {
+  // This will overflow, because it parses as
+  // (-((-9223372036854775807) - 1)) / 2
+  // instead of
+  // -(((-9223372036854775807) - 1) / 2)
+  // Therefore, the result is negative and not positive.
+  print(-(-9223372036854775807 - 1) / 2);
+}

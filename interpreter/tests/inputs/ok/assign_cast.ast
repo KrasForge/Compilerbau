@@ -1,0 +1,173 @@
+Program {
+    items: [
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "main",
+                ),
+                params: [],
+                statements: [
+                    VarDef(
+                        VarDef {
+                            data_type: Int,
+                            res_ident: ResIdent {
+                                ident: Ident(
+                                    "i",
+                                ),
+                                res: None,
+                            },
+                            init: None,
+                        },
+                    ),
+                    VarDef(
+                        VarDef {
+                            data_type: Float,
+                            res_ident: ResIdent {
+                                ident: Ident(
+                                    "x",
+                                ),
+                                res: None,
+                            },
+                            init: Some(
+                                Assign(
+                                    Assign {
+                                        lhs: ResIdent {
+                                            ident: Ident(
+                                                "i",
+                                            ),
+                                            res: None,
+                                        },
+                                        rhs: Literal(
+                                            Int(
+                                                1,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ),
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Div,
+                                        lhs: Var(
+                                            ResIdent {
+                                                ident: Ident(
+                                                    "x",
+                                                ),
+                                                res: None,
+                                            },
+                                        ),
+                                        rhs: Literal(
+                                            Int(
+                                                2,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Assign(
+                        Assign {
+                            lhs: ResIdent {
+                                ident: Ident(
+                                    "i",
+                                ),
+                                res: None,
+                            },
+                            rhs: Literal(
+                                Int(
+                                    2,
+                                ),
+                            ),
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Assign(
+                                    Assign {
+                                        lhs: ResIdent {
+                                            ident: Ident(
+                                                "x",
+                                            ),
+                                            res: None,
+                                        },
+                                        rhs: Var(
+                                            ResIdent {
+                                                ident: Ident(
+                                                    "i",
+                                                ),
+                                                res: None,
+                                            },
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Div,
+                                        lhs: Var(
+                                            ResIdent {
+                                                ident: Ident(
+                                                    "x",
+                                                ),
+                                                res: None,
+                                            },
+                                        ),
+                                        rhs: Literal(
+                                            Int(
+                                                4,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Div,
+                                        lhs: Assign(
+                                            Assign {
+                                                lhs: ResIdent {
+                                                    ident: Ident(
+                                                        "x",
+                                                    ),
+                                                    res: None,
+                                                },
+                                                rhs: Literal(
+                                                    Int(
+                                                        4,
+                                                    ),
+                                                ),
+                                            },
+                                        ),
+                                        rhs: Literal(
+                                            Int(
+                                                8,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                ],
+            },
+        ),
+    ],
+}

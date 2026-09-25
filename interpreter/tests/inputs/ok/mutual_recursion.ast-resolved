@@ -1,0 +1,346 @@
+Program {
+    items: [
+        Func(
+            FuncDef {
+                return_type: Bool,
+                ident: Ident(
+                    "is_even",
+                ),
+                params: [
+                    FuncParam {
+                        data_type: Int,
+                        ident: Ident(
+                            "n",
+                        ),
+                    },
+                ],
+                statements: [
+                    If(
+                        IfStmt {
+                            cond: BinaryOp(
+                                BinOpExpr {
+                                    op: Eq,
+                                    lhs: Var(
+                                        ResIdent {
+                                            ident: Ident(
+                                                "n",
+                                            ),
+                                            res: Some(
+                                                DefId(
+                                                    3,
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    rhs: Literal(
+                                        Int(
+                                            0,
+                                        ),
+                                    ),
+                                },
+                            ),
+                            if_true: Return(
+                                Some(
+                                    Literal(
+                                        Bool(
+                                            true,
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            if_false: None,
+                        },
+                    ),
+                    Return(
+                        Some(
+                            Call(
+                                FuncCall {
+                                    res_ident: ResIdent {
+                                        ident: Ident(
+                                            "is_odd",
+                                        ),
+                                        res: Some(
+                                            DefId(
+                                                1,
+                                            ),
+                                        ),
+                                    },
+                                    args: [
+                                        BinaryOp(
+                                            BinOpExpr {
+                                                op: Sub,
+                                                lhs: Var(
+                                                    ResIdent {
+                                                        ident: Ident(
+                                                            "n",
+                                                        ),
+                                                        res: Some(
+                                                            DefId(
+                                                                3,
+                                                            ),
+                                                        ),
+                                                    },
+                                                ),
+                                                rhs: Literal(
+                                                    Int(
+                                                        1,
+                                                    ),
+                                                ),
+                                            },
+                                        ),
+                                    ],
+                                },
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+        Func(
+            FuncDef {
+                return_type: Bool,
+                ident: Ident(
+                    "is_odd",
+                ),
+                params: [
+                    FuncParam {
+                        data_type: Int,
+                        ident: Ident(
+                            "n",
+                        ),
+                    },
+                ],
+                statements: [
+                    If(
+                        IfStmt {
+                            cond: BinaryOp(
+                                BinOpExpr {
+                                    op: Eq,
+                                    lhs: Var(
+                                        ResIdent {
+                                            ident: Ident(
+                                                "n",
+                                            ),
+                                            res: Some(
+                                                DefId(
+                                                    4,
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    rhs: Literal(
+                                        Int(
+                                            0,
+                                        ),
+                                    ),
+                                },
+                            ),
+                            if_true: Return(
+                                Some(
+                                    Literal(
+                                        Bool(
+                                            false,
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            if_false: None,
+                        },
+                    ),
+                    Return(
+                        Some(
+                            Call(
+                                FuncCall {
+                                    res_ident: ResIdent {
+                                        ident: Ident(
+                                            "is_even",
+                                        ),
+                                        res: Some(
+                                            DefId(
+                                                0,
+                                            ),
+                                        ),
+                                    },
+                                    args: [
+                                        BinaryOp(
+                                            BinOpExpr {
+                                                op: Sub,
+                                                lhs: Var(
+                                                    ResIdent {
+                                                        ident: Ident(
+                                                            "n",
+                                                        ),
+                                                        res: Some(
+                                                            DefId(
+                                                                4,
+                                                            ),
+                                                        ),
+                                                    },
+                                                ),
+                                                rhs: Literal(
+                                                    Int(
+                                                        1,
+                                                    ),
+                                                ),
+                                            },
+                                        ),
+                                    ],
+                                },
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "main",
+                ),
+                params: [],
+                statements: [
+                    For(
+                        ForStmt {
+                            init: VarDef(
+                                VarDef {
+                                    data_type: Int,
+                                    res_ident: ResIdent {
+                                        ident: Ident(
+                                            "i",
+                                        ),
+                                        res: Some(
+                                            DefId(
+                                                5,
+                                            ),
+                                        ),
+                                    },
+                                    init: Some(
+                                        Literal(
+                                            Int(
+                                                0,
+                                            ),
+                                        ),
+                                    ),
+                                },
+                            ),
+                            cond: BinaryOp(
+                                BinOpExpr {
+                                    op: Lt,
+                                    lhs: Var(
+                                        ResIdent {
+                                            ident: Ident(
+                                                "i",
+                                            ),
+                                            res: Some(
+                                                DefId(
+                                                    5,
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    rhs: Literal(
+                                        Int(
+                                            6,
+                                        ),
+                                    ),
+                                },
+                            ),
+                            update: Assign {
+                                lhs: ResIdent {
+                                    ident: Ident(
+                                        "i",
+                                    ),
+                                    res: Some(
+                                        DefId(
+                                            5,
+                                        ),
+                                    ),
+                                },
+                                rhs: BinaryOp(
+                                    BinOpExpr {
+                                        op: Add,
+                                        lhs: Var(
+                                            ResIdent {
+                                                ident: Ident(
+                                                    "i",
+                                                ),
+                                                res: Some(
+                                                    DefId(
+                                                        5,
+                                                    ),
+                                                ),
+                                            },
+                                        ),
+                                        rhs: Literal(
+                                            Int(
+                                                1,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            },
+                            body: Block(
+                                Block {
+                                    statements: [
+                                        If(
+                                            IfStmt {
+                                                cond: Call(
+                                                    FuncCall {
+                                                        res_ident: ResIdent {
+                                                            ident: Ident(
+                                                                "is_even",
+                                                            ),
+                                                            res: Some(
+                                                                DefId(
+                                                                    0,
+                                                                ),
+                                                            ),
+                                                        },
+                                                        args: [
+                                                            Var(
+                                                                ResIdent {
+                                                                    ident: Ident(
+                                                                        "i",
+                                                                    ),
+                                                                    res: Some(
+                                                                        DefId(
+                                                                            5,
+                                                                        ),
+                                                                    ),
+                                                                },
+                                                            ),
+                                                        ],
+                                                    },
+                                                ),
+                                                if_true: Print(
+                                                    PrintStmt {
+                                                        exprs: [
+                                                            Var(
+                                                                ResIdent {
+                                                                    ident: Ident(
+                                                                        "i",
+                                                                    ),
+                                                                    res: Some(
+                                                                        DefId(
+                                                                            5,
+                                                                        ),
+                                                                    ),
+                                                                },
+                                                            ),
+                                                        ],
+                                                    },
+                                                ),
+                                                if_false: None,
+                                            },
+                                        ),
+                                    ],
+                                },
+                            ),
+                        },
+                    ),
+                ],
+            },
+        ),
+    ],
+}

@@ -1,0 +1,75 @@
+ProgramInfo {
+    definitions: Definitions {
+        definitions: [
+            Func(
+                FuncInfo {
+                    item_id: FuncItemId(
+                        ItemId(
+                            0,
+                        ),
+                    ),
+                    return_type: Int,
+                    param_types: [
+                        Int,
+                    ],
+                    local_vars: [
+                        LocalVarDefId(
+                            DefId(
+                                2,
+                            ),
+                        ),
+                    ],
+                },
+            ),
+            Func(
+                FuncInfo {
+                    item_id: FuncItemId(
+                        ItemId(
+                            3,
+                        ),
+                    ),
+                    return_type: Void,
+                    param_types: [],
+                    local_vars: [],
+                },
+            ),
+            LocalVar(
+                VarInfo {
+                    offset: 0,
+                    data_type: Int,
+                },
+            ),
+            GlobalVar(
+                VarInfo {
+                    offset: 0,
+                    data_type: Int,
+                },
+            ),
+            GlobalVar(
+                VarInfo {
+                    offset: 1,
+                    data_type: Int,
+                },
+            ),
+        ],
+    },
+    global_vars: [
+        GlobalVarItemId(
+            ItemId(
+                1,
+            ),
+        ),
+        GlobalVarItemId(
+            ItemId(
+                2,
+            ),
+        ),
+    ],
+    main_func: Some(
+        FuncDefId(
+            DefId(
+                1,
+            ),
+        ),
+    ),
+}

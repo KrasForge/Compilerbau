@@ -1,0 +1,5 @@
+// This is a special case, where conversion in the other way would be allowed.
+
+void call_me(int f) {}
+
+void main() { call_me(1.0); }

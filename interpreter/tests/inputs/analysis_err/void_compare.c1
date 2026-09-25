@@ -1,0 +1,2 @@
+void nothing() {}
+void main() { bool x = nothing() == nothing(); }
