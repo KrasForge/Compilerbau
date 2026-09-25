@@ -1,0 +1,16 @@
+// The initializer of a variable declaration is evaluated BEFORE the
+// variable is defined. So `int x = x` refers to the outer `x`.
+
+int x = 42;
+
+void main() {
+  // local x is initialized from the global x (42), not from itself
+  int x = x;
+  print(x);
+
+  {
+    // inner x is initialized from the local x (42), not from itself
+    int x = x + 1;
+    print(x);
+  }
+}

@@ -1,0 +1,153 @@
+Program {
+    items: [
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "main",
+                ),
+                params: [],
+                statements: [
+                    VarDef(
+                        VarDef {
+                            data_type: Bool,
+                            res_ident: ResIdent {
+                                ident: Ident(
+                                    "b",
+                                ),
+                                res: None,
+                            },
+                            init: None,
+                        },
+                    ),
+                    VarDef(
+                        VarDef {
+                            data_type: Int,
+                            res_ident: ResIdent {
+                                ident: Ident(
+                                    "i",
+                                ),
+                                res: None,
+                            },
+                            init: None,
+                        },
+                    ),
+                    For(
+                        ForStmt {
+                            init: VarDef(
+                                VarDef {
+                                    data_type: Int,
+                                    res_ident: ResIdent {
+                                        ident: Ident(
+                                            "j",
+                                        ),
+                                        res: None,
+                                    },
+                                    init: None,
+                                },
+                            ),
+                            cond: Literal(
+                                Bool(
+                                    false,
+                                ),
+                            ),
+                            update: Assign {
+                                lhs: ResIdent {
+                                    ident: Ident(
+                                        "b",
+                                    ),
+                                    res: None,
+                                },
+                                rhs: Literal(
+                                    Bool(
+                                        false,
+                                    ),
+                                ),
+                            },
+                            body: Empty,
+                        },
+                    ),
+                    For(
+                        ForStmt {
+                            init: VarDef(
+                                VarDef {
+                                    data_type: Int,
+                                    res_ident: ResIdent {
+                                        ident: Ident(
+                                            "j",
+                                        ),
+                                        res: None,
+                                    },
+                                    init: Some(
+                                        Literal(
+                                            Int(
+                                                1,
+                                            ),
+                                        ),
+                                    ),
+                                },
+                            ),
+                            cond: Literal(
+                                Bool(
+                                    false,
+                                ),
+                            ),
+                            update: Assign {
+                                lhs: ResIdent {
+                                    ident: Ident(
+                                        "b",
+                                    ),
+                                    res: None,
+                                },
+                                rhs: Literal(
+                                    Bool(
+                                        false,
+                                    ),
+                                ),
+                            },
+                            body: Empty,
+                        },
+                    ),
+                    For(
+                        ForStmt {
+                            init: Assign(
+                                Assign {
+                                    lhs: ResIdent {
+                                        ident: Ident(
+                                            "i",
+                                        ),
+                                        res: None,
+                                    },
+                                    rhs: Literal(
+                                        Int(
+                                            1,
+                                        ),
+                                    ),
+                                },
+                            ),
+                            cond: Literal(
+                                Bool(
+                                    false,
+                                ),
+                            ),
+                            update: Assign {
+                                lhs: ResIdent {
+                                    ident: Ident(
+                                        "b",
+                                    ),
+                                    res: None,
+                                },
+                                rhs: Literal(
+                                    Bool(
+                                        false,
+                                    ),
+                                ),
+                            },
+                            body: Empty,
+                        },
+                    ),
+                ],
+            },
+        ),
+    ],
+}

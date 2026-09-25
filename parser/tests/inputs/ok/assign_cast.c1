@@ -1,0 +1,11 @@
+// Test int to float casts in assignments.
+void main() {
+  int i;
+  float x = i = 1;
+  print(x / 2); // 0.5
+
+  i = 2;
+  print(x = i);       // 2
+  print(x / 4);       // 0.5
+  print((x = 4) / 8); // 0.5
+}

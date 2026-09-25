@@ -1,0 +1,15 @@
+[package]
+name = "c1"
+version = "0.0.0"
+edition = "2024"
+
+[dependencies]
+lalrpop-util = { version = "0.23", features = ["lexer"] }
+logos = "0.16"
+
+[build-dependencies]
+lalrpop = "0.23"
+
+[dev-dependencies]
+proptest = "1"
+similar = "2"

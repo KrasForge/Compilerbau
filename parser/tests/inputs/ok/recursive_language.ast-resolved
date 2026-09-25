@@ -1,0 +1,772 @@
+Program {
+    items: [
+        GlobalVar(
+            VarDef {
+                data_type: Int,
+                res_ident: ResIdent {
+                    ident: Ident(
+                        "i",
+                    ),
+                    res: Some(
+                        DefId(
+                            5,
+                        ),
+                    ),
+                },
+                init: None,
+            },
+        ),
+        Func(
+            FuncDef {
+                return_type: Int,
+                ident: Ident(
+                    "mod",
+                ),
+                params: [
+                    FuncParam {
+                        data_type: Int,
+                        ident: Ident(
+                            "a",
+                        ),
+                    },
+                    FuncParam {
+                        data_type: Int,
+                        ident: Ident(
+                            "b",
+                        ),
+                    },
+                ],
+                statements: [
+                    Return(
+                        Some(
+                            BinaryOp(
+                                BinOpExpr {
+                                    op: Sub,
+                                    lhs: Var(
+                                        ResIdent {
+                                            ident: Ident(
+                                                "a",
+                                            ),
+                                            res: Some(
+                                                DefId(
+                                                    6,
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    rhs: BinaryOp(
+                                        BinOpExpr {
+                                            op: Mul,
+                                            lhs: BinaryOp(
+                                                BinOpExpr {
+                                                    op: Div,
+                                                    lhs: Var(
+                                                        ResIdent {
+                                                            ident: Ident(
+                                                                "a",
+                                                            ),
+                                                            res: Some(
+                                                                DefId(
+                                                                    6,
+                                                                ),
+                                                            ),
+                                                        },
+                                                    ),
+                                                    rhs: Var(
+                                                        ResIdent {
+                                                            ident: Ident(
+                                                                "b",
+                                                            ),
+                                                            res: Some(
+                                                                DefId(
+                                                                    7,
+                                                                ),
+                                                            ),
+                                                        },
+                                                    ),
+                                                },
+                                            ),
+                                            rhs: Var(
+                                                ResIdent {
+                                                    ident: Ident(
+                                                        "b",
+                                                    ),
+                                                    res: Some(
+                                                        DefId(
+                                                            7,
+                                                        ),
+                                                    ),
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ),
+                        ),
+                    ),
+                ],
+            },
+        ),
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "T",
+                ),
+                params: [],
+                statements: [
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Call(
+                                    FuncCall {
+                                        res_ident: ResIdent {
+                                            ident: Ident(
+                                                "mod",
+                                            ),
+                                            res: Some(
+                                                DefId(
+                                                    0,
+                                                ),
+                                            ),
+                                        },
+                                        args: [
+                                            Var(
+                                                ResIdent {
+                                                    ident: Ident(
+                                                        "i",
+                                                    ),
+                                                    res: Some(
+                                                        DefId(
+                                                            5,
+                                                        ),
+                                                    ),
+                                                },
+                                            ),
+                                            Literal(
+                                                Int(
+                                                    2,
+                                                ),
+                                            ),
+                                        ],
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Assign(
+                        Assign {
+                            lhs: ResIdent {
+                                ident: Ident(
+                                    "i",
+                                ),
+                                res: Some(
+                                    DefId(
+                                        5,
+                                    ),
+                                ),
+                            },
+                            rhs: BinaryOp(
+                                BinOpExpr {
+                                    op: Div,
+                                    lhs: Var(
+                                        ResIdent {
+                                            ident: Ident(
+                                                "i",
+                                            ),
+                                            res: Some(
+                                                DefId(
+                                                    5,
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    rhs: Literal(
+                                        Int(
+                                            2,
+                                        ),
+                                    ),
+                                },
+                            ),
+                        },
+                    ),
+                ],
+            },
+        ),
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "F",
+                ),
+                params: [],
+                statements: [
+                    VarDef(
+                        VarDef {
+                            data_type: Int,
+                            res_ident: ResIdent {
+                                ident: Ident(
+                                    "j",
+                                ),
+                                res: Some(
+                                    DefId(
+                                        8,
+                                    ),
+                                ),
+                            },
+                            init: Some(
+                                Var(
+                                    ResIdent {
+                                        ident: Ident(
+                                            "i",
+                                        ),
+                                        res: Some(
+                                            DefId(
+                                                5,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ),
+                        },
+                    ),
+                    Assign(
+                        Assign {
+                            lhs: ResIdent {
+                                ident: Ident(
+                                    "i",
+                                ),
+                                res: Some(
+                                    DefId(
+                                        5,
+                                    ),
+                                ),
+                            },
+                            rhs: BinaryOp(
+                                BinOpExpr {
+                                    op: Div,
+                                    lhs: Var(
+                                        ResIdent {
+                                            ident: Ident(
+                                                "i",
+                                            ),
+                                            res: Some(
+                                                DefId(
+                                                    5,
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    rhs: Literal(
+                                        Int(
+                                            2,
+                                        ),
+                                    ),
+                                },
+                            ),
+                        },
+                    ),
+                    If(
+                        IfStmt {
+                            cond: BinaryOp(
+                                BinOpExpr {
+                                    op: Eq,
+                                    lhs: Call(
+                                        FuncCall {
+                                            res_ident: ResIdent {
+                                                ident: Ident(
+                                                    "mod",
+                                                ),
+                                                res: Some(
+                                                    DefId(
+                                                        0,
+                                                    ),
+                                                ),
+                                            },
+                                            args: [
+                                                Var(
+                                                    ResIdent {
+                                                        ident: Ident(
+                                                            "j",
+                                                        ),
+                                                        res: Some(
+                                                            DefId(
+                                                                8,
+                                                            ),
+                                                        ),
+                                                    },
+                                                ),
+                                                Literal(
+                                                    Int(
+                                                        2,
+                                                    ),
+                                                ),
+                                            ],
+                                        },
+                                    ),
+                                    rhs: Literal(
+                                        Int(
+                                            0,
+                                        ),
+                                    ),
+                                },
+                            ),
+                            if_true: Block(
+                                Block {
+                                    statements: [
+                                        Call(
+                                            FuncCall {
+                                                res_ident: ResIdent {
+                                                    ident: Ident(
+                                                        "T",
+                                                    ),
+                                                    res: Some(
+                                                        DefId(
+                                                            1,
+                                                        ),
+                                                    ),
+                                                },
+                                                args: [],
+                                            },
+                                        ),
+                                    ],
+                                },
+                            ),
+                            if_false: Some(
+                                Block(
+                                    Block {
+                                        statements: [
+                                            Print(
+                                                PrintStmt {
+                                                    exprs: [
+                                                        Literal(
+                                                            String(
+                                                                "(",
+                                                            ),
+                                                        ),
+                                                    ],
+                                                },
+                                            ),
+                                            Call(
+                                                FuncCall {
+                                                    res_ident: ResIdent {
+                                                        ident: Ident(
+                                                            "T",
+                                                        ),
+                                                        res: Some(
+                                                            DefId(
+                                                                1,
+                                                            ),
+                                                        ),
+                                                    },
+                                                    args: [],
+                                                },
+                                            ),
+                                            Print(
+                                                PrintStmt {
+                                                    exprs: [
+                                                        Literal(
+                                                            String(
+                                                                "&",
+                                                            ),
+                                                        ),
+                                                    ],
+                                                },
+                                            ),
+                                            Call(
+                                                FuncCall {
+                                                    res_ident: ResIdent {
+                                                        ident: Ident(
+                                                            "F",
+                                                        ),
+                                                        res: Some(
+                                                            DefId(
+                                                                2,
+                                                            ),
+                                                        ),
+                                                    },
+                                                    args: [],
+                                                },
+                                            ),
+                                            Print(
+                                                PrintStmt {
+                                                    exprs: [
+                                                        Literal(
+                                                            String(
+                                                                ")",
+                                                            ),
+                                                        ),
+                                                    ],
+                                                },
+                                            ),
+                                        ],
+                                    },
+                                ),
+                            ),
+                        },
+                    ),
+                ],
+            },
+        ),
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "S",
+                ),
+                params: [],
+                statements: [
+                    VarDef(
+                        VarDef {
+                            data_type: Int,
+                            res_ident: ResIdent {
+                                ident: Ident(
+                                    "j",
+                                ),
+                                res: Some(
+                                    DefId(
+                                        9,
+                                    ),
+                                ),
+                            },
+                            init: Some(
+                                Var(
+                                    ResIdent {
+                                        ident: Ident(
+                                            "i",
+                                        ),
+                                        res: Some(
+                                            DefId(
+                                                5,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ),
+                        },
+                    ),
+                    Assign(
+                        Assign {
+                            lhs: ResIdent {
+                                ident: Ident(
+                                    "i",
+                                ),
+                                res: Some(
+                                    DefId(
+                                        5,
+                                    ),
+                                ),
+                            },
+                            rhs: BinaryOp(
+                                BinOpExpr {
+                                    op: Div,
+                                    lhs: Var(
+                                        ResIdent {
+                                            ident: Ident(
+                                                "i",
+                                            ),
+                                            res: Some(
+                                                DefId(
+                                                    5,
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    rhs: Literal(
+                                        Int(
+                                            2,
+                                        ),
+                                    ),
+                                },
+                            ),
+                        },
+                    ),
+                    If(
+                        IfStmt {
+                            cond: BinaryOp(
+                                BinOpExpr {
+                                    op: Neq,
+                                    lhs: Call(
+                                        FuncCall {
+                                            res_ident: ResIdent {
+                                                ident: Ident(
+                                                    "mod",
+                                                ),
+                                                res: Some(
+                                                    DefId(
+                                                        0,
+                                                    ),
+                                                ),
+                                            },
+                                            args: [
+                                                Var(
+                                                    ResIdent {
+                                                        ident: Ident(
+                                                            "j",
+                                                        ),
+                                                        res: Some(
+                                                            DefId(
+                                                                9,
+                                                            ),
+                                                        ),
+                                                    },
+                                                ),
+                                                Literal(
+                                                    Int(
+                                                        2,
+                                                    ),
+                                                ),
+                                            ],
+                                        },
+                                    ),
+                                    rhs: Literal(
+                                        Int(
+                                            0,
+                                        ),
+                                    ),
+                                },
+                            ),
+                            if_true: Block(
+                                Block {
+                                    statements: [
+                                        Print(
+                                            PrintStmt {
+                                                exprs: [
+                                                    Literal(
+                                                        String(
+                                                            "(",
+                                                        ),
+                                                    ),
+                                                ],
+                                            },
+                                        ),
+                                        Call(
+                                            FuncCall {
+                                                res_ident: ResIdent {
+                                                    ident: Ident(
+                                                        "F",
+                                                    ),
+                                                    res: Some(
+                                                        DefId(
+                                                            2,
+                                                        ),
+                                                    ),
+                                                },
+                                                args: [],
+                                            },
+                                        ),
+                                        Print(
+                                            PrintStmt {
+                                                exprs: [
+                                                    Literal(
+                                                        String(
+                                                            "|",
+                                                        ),
+                                                    ),
+                                                ],
+                                            },
+                                        ),
+                                        Call(
+                                            FuncCall {
+                                                res_ident: ResIdent {
+                                                    ident: Ident(
+                                                        "S",
+                                                    ),
+                                                    res: Some(
+                                                        DefId(
+                                                            3,
+                                                        ),
+                                                    ),
+                                                },
+                                                args: [],
+                                            },
+                                        ),
+                                        Print(
+                                            PrintStmt {
+                                                exprs: [
+                                                    Literal(
+                                                        String(
+                                                            ")",
+                                                        ),
+                                                    ),
+                                                ],
+                                            },
+                                        ),
+                                    ],
+                                },
+                            ),
+                            if_false: Some(
+                                Call(
+                                    FuncCall {
+                                        res_ident: ResIdent {
+                                            ident: Ident(
+                                                "F",
+                                            ),
+                                            res: Some(
+                                                DefId(
+                                                    2,
+                                                ),
+                                            ),
+                                        },
+                                        args: [],
+                                    },
+                                ),
+                            ),
+                        },
+                    ),
+                ],
+            },
+        ),
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "main",
+                ),
+                params: [],
+                statements: [
+                    For(
+                        ForStmt {
+                            init: VarDef(
+                                VarDef {
+                                    data_type: Int,
+                                    res_ident: ResIdent {
+                                        ident: Ident(
+                                            "j",
+                                        ),
+                                        res: Some(
+                                            DefId(
+                                                10,
+                                            ),
+                                        ),
+                                    },
+                                    init: Some(
+                                        Literal(
+                                            Int(
+                                                0,
+                                            ),
+                                        ),
+                                    ),
+                                },
+                            ),
+                            cond: BinaryOp(
+                                BinOpExpr {
+                                    op: Lt,
+                                    lhs: Var(
+                                        ResIdent {
+                                            ident: Ident(
+                                                "j",
+                                            ),
+                                            res: Some(
+                                                DefId(
+                                                    10,
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    rhs: Literal(
+                                        Int(
+                                            10,
+                                        ),
+                                    ),
+                                },
+                            ),
+                            update: Assign {
+                                lhs: ResIdent {
+                                    ident: Ident(
+                                        "j",
+                                    ),
+                                    res: Some(
+                                        DefId(
+                                            10,
+                                        ),
+                                    ),
+                                },
+                                rhs: BinaryOp(
+                                    BinOpExpr {
+                                        op: Add,
+                                        lhs: Var(
+                                            ResIdent {
+                                                ident: Ident(
+                                                    "j",
+                                                ),
+                                                res: Some(
+                                                    DefId(
+                                                        10,
+                                                    ),
+                                                ),
+                                            },
+                                        ),
+                                        rhs: Literal(
+                                            Int(
+                                                1,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            },
+                            body: Block(
+                                Block {
+                                    statements: [
+                                        Print(
+                                            PrintStmt {
+                                                exprs: [
+                                                    Literal(
+                                                        String(
+                                                            "--- nächstes Wort ---",
+                                                        ),
+                                                    ),
+                                                ],
+                                            },
+                                        ),
+                                        Assign(
+                                            Assign {
+                                                lhs: ResIdent {
+                                                    ident: Ident(
+                                                        "i",
+                                                    ),
+                                                    res: Some(
+                                                        DefId(
+                                                            5,
+                                                        ),
+                                                    ),
+                                                },
+                                                rhs: Var(
+                                                    ResIdent {
+                                                        ident: Ident(
+                                                            "j",
+                                                        ),
+                                                        res: Some(
+                                                            DefId(
+                                                                10,
+                                                            ),
+                                                        ),
+                                                    },
+                                                ),
+                                            },
+                                        ),
+                                        Call(
+                                            FuncCall {
+                                                res_ident: ResIdent {
+                                                    ident: Ident(
+                                                        "S",
+                                                    ),
+                                                    res: Some(
+                                                        DefId(
+                                                            3,
+                                                        ),
+                                                    ),
+                                                },
+                                                args: [],
+                                            },
+                                        ),
+                                    ],
+                                },
+                            ),
+                        },
+                    ),
+                ],
+            },
+        ),
+    ],
+}

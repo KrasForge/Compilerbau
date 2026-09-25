@@ -1,0 +1,128 @@
+Program {
+    items: [
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "main",
+                ),
+                params: [],
+                statements: [
+                    Print(
+                        PrintStmt {
+                            exprs: [],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    String(
+                                        "Hello ",
+                                    ),
+                                ),
+                                Literal(
+                                    String(
+                                        "World!",
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    Int(
+                                        1,
+                                    ),
+                                ),
+                                Literal(
+                                    String(
+                                        " + ",
+                                    ),
+                                ),
+                                Literal(
+                                    Int(
+                                        2,
+                                    ),
+                                ),
+                                Literal(
+                                    String(
+                                        " = ",
+                                    ),
+                                ),
+                                BinaryOp(
+                                    BinOpExpr {
+                                        op: Add,
+                                        lhs: Literal(
+                                            Int(
+                                                1,
+                                            ),
+                                        ),
+                                        rhs: Literal(
+                                            Int(
+                                                2,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Literal(
+                                    Int(
+                                        1,
+                                    ),
+                                ),
+                                Literal(
+                                    Int(
+                                        2,
+                                    ),
+                                ),
+                                Literal(
+                                    Int(
+                                        3,
+                                    ),
+                                ),
+                                Literal(
+                                    Int(
+                                        4,
+                                    ),
+                                ),
+                                Literal(
+                                    Int(
+                                        5,
+                                    ),
+                                ),
+                                Literal(
+                                    Int(
+                                        6,
+                                    ),
+                                ),
+                                Literal(
+                                    Int(
+                                        7,
+                                    ),
+                                ),
+                                Literal(
+                                    Int(
+                                        8,
+                                    ),
+                                ),
+                                Literal(
+                                    Int(
+                                        9,
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                ],
+            },
+        ),
+    ],
+}

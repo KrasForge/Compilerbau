@@ -1,0 +1,23 @@
+// 0 < 1
+
+void main() {
+  print(false < false); // false
+  print(false < true);  // true
+  print(true < false);  // false
+  print(true < true);   // false
+  print("---");
+  print(false > false); // false
+  print(false > true);  // false
+  print(true > false);  // true
+  print(true > true);   // false
+  print("---");
+  print(false <= false); // true
+  print(false <= true);  // true
+  print(true <= false);  // false
+  print(true <= true);   // true
+  print("---");
+  print(false >= false); // true
+  print(false >= true);  // false
+  print(true >= false);  // true
+  print(true >= true);   // true
+}

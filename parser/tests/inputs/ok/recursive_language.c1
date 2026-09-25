@@ -1,0 +1,39 @@
+int i;
+
+int mod(int a, int b) { return a - a / b * b; }
+
+void T() {
+	print(mod(i, 2));
+	i = i / 2;
+}
+
+void F() {
+	int j = i;
+	i = i / 2;
+	
+	if (mod(j, 2) == 0) { T(); }
+	else {
+		print("("); T(); print("&"); F(); print(")");
+	}
+}
+
+void S() {
+	int j = i;
+	i = i / 2;
+	
+	if (mod(j, 2) != 0) {
+		print("("); F(); print("|"); S(); print(")");
+	}
+	else F();
+}
+
+void main() {
+	/* Endlosschleife zur Generierung von Wörtern */
+	for (int j = 0; j < 10; j = j + 1) {
+		print("--- nächstes Wort ---");
+		i = j;
+		S();
+	}
+	
+	/* hierhin gelangt der Kontrollfluss nicht */
+}

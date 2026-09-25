@@ -1,0 +1,10 @@
+// Test that an implicit return from a void function restores the
+// previous function frame.
+
+void foo() { int i = 2; }
+
+void main() {
+  int i = 1;
+  foo();
+  print(i);
+}

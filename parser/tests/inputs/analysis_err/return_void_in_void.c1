@@ -1,0 +1,5 @@
+// This is allowed by common C compilers, but actually forbidden by the
+// standard.
+
+void nothing() {}
+void main() { return nothing(); }

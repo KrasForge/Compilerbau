@@ -1,0 +1,87 @@
+int count;
+
+int check_while() {
+  count = 0;
+  while ((count = count + 1) > 0)
+    return 1;
+  print("after while should be unreachable");
+}
+
+int check_do_while() {
+  do
+    return 2;
+  while ((count = -1) == -1);
+  print("after do-while should be unreachable");
+}
+
+int check_for() {
+  for (count = 0; (count = count + 1) > 0; count = count + 1)
+    return 3;
+  print("after for should be unreachable");
+}
+
+int check_block() {
+  {
+    return 4;
+    print("after return in block should be unreachable");
+  }
+  print("after block should be unreachable");
+}
+
+int check_block_deep() {
+  count = 0;
+  {
+    count = count + 1;
+    while (true) {
+      count = count + 1;
+      {
+        return 5;
+        print("unreachable deep 1");
+      }
+      print("unreachable deep 2");
+    }
+    print("unreachable deep 3");
+  }
+  print("unreachable deep 4");
+}
+
+void main() {
+  int res = check_while();
+  if (res != 1) {
+    print("wrong return value from while");
+  }
+  if (count != 1) {
+    print("while condition evaluated too often");
+  }
+
+  res = check_do_while();
+  if (res != 2) {
+    print("wrong return value from do-while");
+  }
+  if (count != 1) {
+    print("do-while condition evaluated incorrectly");
+  }
+
+  res = check_for();
+  if (res != 3) {
+    print("wrong return value from for");
+  }
+  if (count != 1) {
+    print("for condition or update evaluated too often");
+  }
+
+  res = check_block();
+  if (res != 4) {
+    print("wrong return value from block (shallow)");
+  }
+
+  res = check_block_deep();
+  if (res != 5) {
+    print("wrong return value from block (deep)");
+  }
+  if (count != 2) {
+    print("deep block evaluated incorrectly");
+  }
+
+  print("done");
+}

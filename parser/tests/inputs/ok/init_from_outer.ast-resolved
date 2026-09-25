@@ -1,0 +1,147 @@
+Program {
+    items: [
+        GlobalVar(
+            VarDef {
+                data_type: Int,
+                res_ident: ResIdent {
+                    ident: Ident(
+                        "x",
+                    ),
+                    res: Some(
+                        DefId(
+                            1,
+                        ),
+                    ),
+                },
+                init: Some(
+                    Literal(
+                        Int(
+                            42,
+                        ),
+                    ),
+                ),
+            },
+        ),
+        Func(
+            FuncDef {
+                return_type: Void,
+                ident: Ident(
+                    "main",
+                ),
+                params: [],
+                statements: [
+                    VarDef(
+                        VarDef {
+                            data_type: Int,
+                            res_ident: ResIdent {
+                                ident: Ident(
+                                    "x",
+                                ),
+                                res: Some(
+                                    DefId(
+                                        2,
+                                    ),
+                                ),
+                            },
+                            init: Some(
+                                Var(
+                                    ResIdent {
+                                        ident: Ident(
+                                            "x",
+                                        ),
+                                        res: Some(
+                                            DefId(
+                                                1,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ),
+                        },
+                    ),
+                    Print(
+                        PrintStmt {
+                            exprs: [
+                                Var(
+                                    ResIdent {
+                                        ident: Ident(
+                                            "x",
+                                        ),
+                                        res: Some(
+                                            DefId(
+                                                2,
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    Block(
+                        Block {
+                            statements: [
+                                VarDef(
+                                    VarDef {
+                                        data_type: Int,
+                                        res_ident: ResIdent {
+                                            ident: Ident(
+                                                "x",
+                                            ),
+                                            res: Some(
+                                                DefId(
+                                                    3,
+                                                ),
+                                            ),
+                                        },
+                                        init: Some(
+                                            BinaryOp(
+                                                BinOpExpr {
+                                                    op: Add,
+                                                    lhs: Var(
+                                                        ResIdent {
+                                                            ident: Ident(
+                                                                "x",
+                                                            ),
+                                                            res: Some(
+                                                                DefId(
+                                                                    2,
+                                                                ),
+                                                            ),
+                                                        },
+                                                    ),
+                                                    rhs: Literal(
+                                                        Int(
+                                                            1,
+                                                        ),
+                                                    ),
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                ),
+                                Print(
+                                    PrintStmt {
+                                        exprs: [
+                                            Var(
+                                                ResIdent {
+                                                    ident: Ident(
+                                                        "x",
+                                                    ),
+                                                    res: Some(
+                                                        DefId(
+                                                            3,
+                                                        ),
+                                                    ),
+                                                },
+                                            ),
+                                        ],
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                ],
+            },
+        ),
+    ],
+}

@@ -1,0 +1,153 @@
+ProgramInfo {
+    definitions: Definitions {
+        definitions: [
+            Func(
+                FuncInfo {
+                    item_id: FuncItemId(
+                        ItemId(
+                            0,
+                        ),
+                    ),
+                    return_type: Float,
+                    param_types: [
+                        Int,
+                        Int,
+                    ],
+                    local_vars: [
+                        LocalVarDefId(
+                            DefId(
+                                2,
+                            ),
+                        ),
+                        LocalVarDefId(
+                            DefId(
+                                3,
+                            ),
+                        ),
+                        LocalVarDefId(
+                            DefId(
+                                4,
+                            ),
+                        ),
+                        LocalVarDefId(
+                            DefId(
+                                5,
+                            ),
+                        ),
+                        LocalVarDefId(
+                            DefId(
+                                6,
+                            ),
+                        ),
+                        LocalVarDefId(
+                            DefId(
+                                7,
+                            ),
+                        ),
+                        LocalVarDefId(
+                            DefId(
+                                8,
+                            ),
+                        ),
+                        LocalVarDefId(
+                            DefId(
+                                9,
+                            ),
+                        ),
+                    ],
+                },
+            ),
+            Func(
+                FuncInfo {
+                    item_id: FuncItemId(
+                        ItemId(
+                            1,
+                        ),
+                    ),
+                    return_type: Void,
+                    param_types: [],
+                    local_vars: [
+                        LocalVarDefId(
+                            DefId(
+                                10,
+                            ),
+                        ),
+                        LocalVarDefId(
+                            DefId(
+                                11,
+                            ),
+                        ),
+                    ],
+                },
+            ),
+            LocalVar(
+                VarInfo {
+                    offset: 0,
+                    data_type: Int,
+                },
+            ),
+            LocalVar(
+                VarInfo {
+                    offset: 1,
+                    data_type: Int,
+                },
+            ),
+            LocalVar(
+                VarInfo {
+                    offset: 2,
+                    data_type: Int,
+                },
+            ),
+            LocalVar(
+                VarInfo {
+                    offset: 3,
+                    data_type: Int,
+                },
+            ),
+            LocalVar(
+                VarInfo {
+                    offset: 4,
+                    data_type: Float,
+                },
+            ),
+            LocalVar(
+                VarInfo {
+                    offset: 5,
+                    data_type: Float,
+                },
+            ),
+            LocalVar(
+                VarInfo {
+                    offset: 6,
+                    data_type: Bool,
+                },
+            ),
+            LocalVar(
+                VarInfo {
+                    offset: 7,
+                    data_type: Bool,
+                },
+            ),
+            LocalVar(
+                VarInfo {
+                    offset: 0,
+                    data_type: Int,
+                },
+            ),
+            LocalVar(
+                VarInfo {
+                    offset: 1,
+                    data_type: Int,
+                },
+            ),
+        ],
+    },
+    global_vars: [],
+    main_func: Some(
+        FuncDefId(
+            DefId(
+                1,
+            ),
+        ),
+    ),
+}
